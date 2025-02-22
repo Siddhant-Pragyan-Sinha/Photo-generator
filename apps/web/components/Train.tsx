@@ -55,7 +55,9 @@ export function Train() {
       const token = await getToken();
       setModelTraining(true);
       await axios.post(`${BACKEND_URL}/ai/training`, input, {
-        headers: { Authorization: `Bearer ${token}` },
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
       });
       toast.success(
         "Model training started! This will take approximately 20 minutes."

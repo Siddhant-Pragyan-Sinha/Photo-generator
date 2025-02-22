@@ -52,9 +52,7 @@ export default function Train() {
         const token = await getToken()
         const response = await axios.post(`${BACKEND_URL}/ai/training`, input, {
             headers: {
-                Authorization
-                
-                : `Bearer ${token}`
+                Authorization: `Bearer ${token}`
             }
         });
         router.push("/");
