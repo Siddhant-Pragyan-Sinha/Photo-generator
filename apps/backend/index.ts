@@ -11,6 +11,20 @@ import dotenv from "dotenv";
 
 import paymentRoutes from "./routes/payment.routes";
 
+const app = express();
+app.use(
+  cors({
+    origin: process.env.FRONTEND_URL?.split(",") || [
+        "https://photoai.vercel.app",
+        "http://localhost:3000"
+      ],
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+  })
+);
+app.use(express.json());
+
 dotenv.config();
 
 // Add this after dotenv.config()
@@ -45,19 +59,7 @@ const s3Client = new S3Client({
     endpoint: process.env.ENDPOINT, // Optional for custom endpoints
   });
 
-const app = express();
-app.use(
-  cors({
-    origin: process.env.FRONTEND_URL?.split(",") || [
-        "https://photo.100xdevs.com",
-        "http://localhost:3000"
-      ],
-    credentials: true,
-    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization"],
-  })
-);
-app.use(express.json());
+
 
 // Updated route
 app.get("/pre-signed-url", async (req, res) => {
@@ -89,7 +91,7 @@ app.get("/pre-signed-url", async (req, res) => {
 app.post("/ai/training", authMiddleware, async (req, res) => {
  
     const parsedBody = TrainModel.safeParse(req.body);
-    console.log(USER_ID);
+    console.log(req.userId);
     if (!parsedBody.success) {
         res.status(411).json({
             
@@ -113,7 +115,7 @@ app.post("/ai/training", authMiddleware, async (req, res) => {
         ethinicity: parsedBody.data.ethinicity,
         eyeColor: parsedBody.data.eyeColor,
         bald: parsedBody.data.bald,
-        userId: USER_ID!,
+        userId: req.userId!,
         zipUrl: parsedBody.data.zipUrl,
         falAiRequestId: request_id,
       },
@@ -154,7 +156,7 @@ app.post("/ai/generate", authMiddleware, async (req, res) => {
   const data = await prismaClient.outputImages.create({
     data: {
       prompt: parsedBody.data.prompt,
-      userId: USER_ID!,
+      userId: req.userId!,
       modelId: parsedBody.data.modelId,
       imageUrl: "",
       falAiRequestId: request_id,
@@ -204,7 +206,7 @@ app.post("/pack/generate", authMiddleware, async (req, res) => {
   const images = await prismaClient.outputImages.createManyAndReturn({
     data: prompts.map((prompt, index) => ({
       prompt: prompt.prompt,
-      userId: USER_ID!,
+      userId: req.userId!,
       modelId: parsedBody.data.modelId,
       imageUrl: "",
       falAiRequestId: requestIds[index].request_id,
@@ -232,7 +234,7 @@ app.get("/image/bulk", authMiddleware, async (req, res) => {
   const imagesData = await prismaClient.outputImages.findMany({
     where: {
       id: { in: ids },
-      userId: USER_ID!,
+      userId: req.userId,
       status: {
         not: "Failed",
       },
@@ -252,7 +254,7 @@ app.get("/image/bulk", authMiddleware, async (req, res) => {
 app.get("/models", authMiddleware, async (req, res) => {
   const models = await prismaClient.model.findMany({
     where: {
-      OR: [{ userId: USER_ID }, { open: true }],
+      OR: [{ userId: req.userId }, { open: true }],
     },
   });
 
