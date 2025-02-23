@@ -8,8 +8,7 @@ import { FalAIModel } from "./models/FalAIModel";
 import cors from "cors";
 import { authMiddleware } from "./middleware";
 import dotenv from "dotenv";
-
-import paymentRoutes from "./routes/payment.routes";
+import { any } from "zod";
 
 const app = express();
 app.use(
@@ -127,46 +126,45 @@ app.post("/ai/training", authMiddleware, async (req, res) => {
 });
 
 app.post("/ai/generate", authMiddleware, async (req, res) => {
-  const parsedBody = GenerateImage.safeParse(req.body);
+    const parsedBody = GenerateImage.safeParse(req.body)
 
-  if (!parsedBody.success) {
-    res.status(411).json({});
-    return;
-  }
+    if (!parsedBody.success) {
+        res.status(411).json({
+            
+        })
+        return;
+    }
 
-  const model = await prismaClient.model.findUnique({
-    where: {
-      id: parsedBody.data.modelId,
-    },
-  });
+    const model = await prismaClient.model.findUnique({
+        where: {
+            id: parsedBody.data.modelId
+        }
+    })
 
-  if (!model || !model.tensorPath) {
-    res.status(411).json({
-      message: "Model not found",
-    });
-    return;
-  }
+    if (!model || !model.tensorPath) {
+        res.status(411).json({
+            message: "Model not found"
+        })
+        return;
+    }
 
-  
-  const { request_id, response_url } = await falAiModel.generateImage(
-    parsedBody.data.prompt,
-    model.tensorPath
-  );
+    console.log("ji there")
+    const {request_id, response_url} = await falAiModel.generateImage(parsedBody.data.prompt, model.tensorPath);
 
-  const data = await prismaClient.outputImages.create({
-    data: {
-      prompt: parsedBody.data.prompt,
-      userId: req.userId!,
-      modelId: parsedBody.data.modelId,
-      imageUrl: "",
-      falAiRequestId: request_id,
-    },
-  });
+    const data = await prismaClient.outputImages.create({
+        data: {
+            prompt: parsedBody.data.prompt,
+            userId: req.userId!,
+            modelId: parsedBody.data.modelId,
+            imageUrl: "",
+            falAiRequestId: request_id
+        }
+    })
 
-  res.json({
-    imageId: data.id,
-  });
-});
+    res.json({
+        imageId: data.id
+    })
+})
 
 app.post("/pack/generate", authMiddleware, async (req, res) => {
   const parsedBody = GenerateImagesFromPack.safeParse(req.body);
@@ -271,6 +269,7 @@ app.post("/fal-ai/webhook/train", async (req, res) => {
   });
 
   const { imageUrl } = await falAiModel.generateImageSync(
+    // @ts-ignore
     result.data.diffusers_lora_file.url
   );
 
@@ -324,8 +323,6 @@ app.post("/fal-ai/webhook/image", async (req, res) => {
     message: "Webhook received",
   });
 });
-
-app.use("/payment", paymentRoutes);
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);

@@ -27,7 +27,7 @@ import { useRouter } from "next/navigation"
 import { useAuth } from "@clerk/nextjs"
 
 export default function Train() {
-    const { getToken } = useAuth();
+    const { getToken } = useAuth();
     const [zipUrl, setZipUrl] = useState("");
     const [type, setType] = useState("Man")
     const [age, setAge] = useState<string>()
@@ -38,7 +38,7 @@ export default function Train() {
     const router = useRouter();
 
     async function trainModal() {
-        // TODO:-Add type here from types.ts after splitting into different variables and then inferring them on the frontend
+        // Add type here
         const input = {
             zipUrl,
             type,
@@ -52,7 +52,9 @@ export default function Train() {
         const token = await getToken()
         const response = await axios.post(`${BACKEND_URL}/ai/training`, input, {
             headers: {
-                Authorization: `Bearer ${token}`
+                Authorization
+                
+                : `Bearer ${token}`
             }
         });
         router.push("/");
