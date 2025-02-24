@@ -91,24 +91,24 @@ export function Hero() {
   const testimonials = [
     {
       text: "The quality of these AI portraits is absolutely incredible. They look better than my professional headshots!",
-      author: "MIST.",
-      role: "Disruptor",
+      author: "CIA",
+      role: "Real Information Security Team",
       avatar:
-        "https://wearemist.in/_next/image?url=%2Fimages%2FhackerWhite.png&w=48&q=75",
+        "https://upload.wikimedia.org/wikipedia/commons/2/25/Seal_of_the_Central_Intelligence_Agency.svg",
     },
     {
       text: "We used this for our family portraits and the results were stunning. So much easier than a traditional photoshoot.",
-      author: "IECSE",
-      role: "Brand in itself",
+      author: "NIA",
+      role: "Anti-Terror(Not Wannabes)",
       avatar:
-        "https://media.licdn.com/dms/image/v2/C560BAQF4bs7QJMaK6g/company-logo_200_200/company-logo_200_200/0/1631326400942?e=2147483647&v=beta&t=HjX60LXlX8wN5mSi1Bj6GKuh--s10DHjmyuenMPGfL4",
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRPmVuwTLVyT39DyQXnWwi5oZuBk8E6AMl4KA&s",
     },
     {
       text: "Game-changer for my professional brand. The variety of styles and quick delivery is unmatched.",
-      author: "Cryptonite",
-      role: "Cybersecurity Nerds",
+      author: "Mossad",
+      role: "Cybersecurity Experts",
       avatar:
-        "https://media.licdn.com/dms/image/v2/C4D0BAQF4AI_Ig6Jr2A/company-logo_200_200/company-logo_200_200/0/1630528400888/cryptonite_mit_logo?e=2147483647&v=beta&t=QFRtq_oFUO_pV2KgkJ8y5v6CQ6t2KCB0pJB_72F6Q6c",
+        "https://upload.wikimedia.org/wikipedia/commons/8/86/Mossad_seal.svg",
     },
   ];
 

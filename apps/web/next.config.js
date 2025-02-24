@@ -8,7 +8,11 @@ const nextConfig = {
       },
       {
         protocol: 'https',
-        hostname: 'media-hosting.imagekit.io',
+        hostname: 'encrypted-tbn0.gstatic.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'upload.wikimedia.org',
       },
       {
         protocol: 'https',
@@ -17,10 +21,6 @@ const nextConfig = {
       {
         protocol: 'https',
         hostname: '*.clerk.accounts.dev', 
-      },
-      {
-        protocol: 'https',
-        hostname: 'instagram.fbom2-2.fna.fbcdn.net',
       },
       {
         protocol: 'https',
